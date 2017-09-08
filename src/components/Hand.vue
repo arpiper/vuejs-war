@@ -27,6 +27,17 @@
         v-bind:owner="playerId"
         cardBack="card">
       </card>
+      <card
+        v-if="warCard"
+        v-for="(c,i) in warCard"
+        v-bind:key="i"
+        v-bind:value="c.value"
+        v-bind:suit="c.suit"
+        v-bind:owver="playerId"
+        cardBack="card"
+        v-bind:faceUp="true"
+        class="war-card">
+      </card>
     </div>
   </div>
 </template>
@@ -56,7 +67,10 @@ export default {
       },
       drawThree: function (state) {
         return state[this.playerId].drawnCards
-      }
+      },
+      warCard: function (state) {
+        return state[this.playerId].warCard
+      },
     })
   },
   methods: {
@@ -98,6 +112,9 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+div.war-card {
+  transform: rotate(180deg);
 }
 .flipcard-enter, .flipcard-enter-active, .flipcard-leave, .flipcard-leave-active {
   transition: transform 1s;

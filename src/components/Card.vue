@@ -56,10 +56,18 @@ export default {
         y = 0
         d = 0
       }
+      if (el.className.indexOf("war-card") >= 0) {
+        x = y = 0
+      }
       el.style.transform = `translate(${x}, ${y}) rotateY(${d})`
     },
     beforeLeave: function (el) {
+      let x = "-85px"
       let y = 0
+      let d = "180deg"
+      if (el.className.indexOf("war-card") >= 0) {
+        x = y = 0
+      }
       if (this.drawWinner === this.owner) {
         y = "0"
       } else if (this.drawWinner === "p1" && this.owner === "p2") {
@@ -67,7 +75,7 @@ export default {
       } else if (this.drawWinner === "p2" && this.owner === "p1") {
         y = "300%"
       }
-      el.style.transform = `translate(-85px, ${y}) rotateY(180deg)`
+      el.style.transform = `translate(${x}, ${y}) rotateY(${d})`
     },
     leave: function (el, done) {
       el.style.transform = "translate(0, 100%) rotateY(0)"

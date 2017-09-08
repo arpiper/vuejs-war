@@ -18,12 +18,14 @@ const store = new Vuex.Store({
     p1: {
       hand: [],
       card: undefined,
-      drawnCards: []
+      drawnCards: [],
+      warCard: []
     },
     p2: {
       hand: [],
       card: undefined,
-      drawnCards: []
+      drawnCards: [],
+      warCard: []
     },
     pot: [],
   },
@@ -55,6 +57,12 @@ const store = new Vuex.Store({
       if (state.p2.drawnCards) {
         state.p2.drawnCards = []
       }
+      if (state.p1.warCard) {
+        state.p1.warCard = []
+      }
+      if (state.p2.warCard) {
+        state.p2.warCard = []
+      }
     },
     collectCards (state, pl) {
       state[pl.player].hand = state.pot.concat(state[pl.player].hand)
@@ -62,7 +70,13 @@ const store = new Vuex.Store({
     },
     updatePot (state, pl) {
       state.pot = state.pot.concat(pl.cards)
-    }
+    },
+    warState (state, pl) {
+      state.p1.warCard.push(state.p1.card)
+      state.p1.card = undefined
+      state.p2.warCard.push(state.p2.card)
+      state.p2.card = undefined
+    },
   },
   actions: {
     endRound ({ commit }) {

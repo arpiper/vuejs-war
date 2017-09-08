@@ -21,6 +21,7 @@
     <div>
       <button @click="redeal()">New Game</button>
       <button @click="drawCards()" :disabled="winner">Draw</button>
+      <button @click="run()" :disabled="winner">Run</button>
       <button @click="clearCards()" >clear</button>
     </div>
     <div class="output">
@@ -32,9 +33,9 @@
 </template>
 
 <script>
-import Card from "./components/Card.vue"
+import Card from "./components/Card2.vue"
 import Deck from "./components/Deck.vue"
-import Hand from "./components/Hand.vue"
+import Hand from "./components/Hand2.vue"
 import { mapState, mapGetters, mapMutations } from "vuex"
 
 export default {
@@ -72,26 +73,45 @@ export default {
       this.deck = []
       this.evtHub.$emit("redeal")
     },
+    run: function () {
+      let vm = this
+      this.playCards()
+      let w = this.compareCards()
+      if (w === 0) {
+        setTimeout(function () {
+          vm.commenceWar()
+        }, 500)
+      } else {
+        setTimeout(function () {
+          vm.clearCards()
+        }, 500)
+      }
+    },
     compareCards: function () {
       this.$store.commit("updatePot", {cards: [this.p1Card, this.p2Card]})
       if (this.p1Card.value > this.p2Card.value ) {
         this.$store.commit("collectCards", {player: "p1"})
         if (!this.p2Alive) {
-          console.log('p1 wins')
           this.winner = "Player 1"
         } 
         this.drawWinner = "p1"
+        return 1
       } else if (this.p1Card.value < this.p2Card.value) {
         this.$store.commit("collectCards", {player: "p2"})
         if (!this.p1Alive) {
-          console.log("p2 winws")
           this.winner = "Player 2"
         } 
         this.drawWinner = "p2"
+        return 2
       } else {
-        this.commenceWar()
+        let vm = this
+        setTimeout(function () {
+          vm.$store.commit("warState")
+          vm.commenceWar()
+        }, 1000)
+        //this.commenceWar()
       }
-      console.log(this.drawWinner)
+      return 0
     },
     commenceWar: function () {
       let n = 3
@@ -105,8 +125,13 @@ export default {
       this.$store.commit("updatePot", {
         cards: this.p2Drawn.concat(this.p1Drawn)
       })
-      this.$store.commit("playCard", {player: "p1", faceUp: true})
-      this.$store.commit("playCard", {player: "p2", faceUp: true})
+      let vm = this
+      setTimeout(function () {
+        // vm.drawCards()
+      }, 500)
+      this.playCards()
+      // this.$store.commit("playCard", {player: "p1", faceUp: true})
+      // this.$store.commit("playCard", {player: "p2", faceUp: true})
       // check 4card
       this.compareCards()
     },
