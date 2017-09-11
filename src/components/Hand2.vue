@@ -8,7 +8,8 @@
     </card>
     <transition name="play-card"
       @before-enter="playCardBeforeEnter"
-      @after-enter="playCardAfterEnter">
+      @after-enter="playCardAfterEnter"
+      @before-leave="playCardBeforeLeave">
       <card 
         v-if="card"
         v-bind:value="card.value"
@@ -19,7 +20,9 @@
     </transition>
     <div v-if="drawThree">
       <transition-group name="draw-three"
-        @after-enter="drawThreeAfterEnter">
+        @before-enter="drawThreeBeforeEnter"
+        @after-enter="drawThreeAfterEnter"
+        @before-leave="drawThreeBeforeLeave">
         <card
           v-for="(c,i) in drawThree"
           v-bind:key="i"
@@ -33,7 +36,8 @@
       </transition-group>
       <transition-group name="war-card"
         @before-enter="warCardBeforeEnter"
-        @after-enter="warCardAfterEnter">
+        @after-enter="warCardAfterEnter"
+        @before-leave="warCardBeforeLeave">
         <card
           v-if="warCard"
           v-for="(c,i) in warCard"
@@ -99,6 +103,21 @@ export default {
         el.style.transform = `translate(${x}, ${y}) rotateY(180deg)`
       }, d)
     },
+    playCardBeforeLeave: function (el) {
+      if (!this.warCard.length) {
+        console.log(this)
+        let x = "-85px"
+        let y = 0
+        if (this.drawWinner === this.playerId) {
+          y = 0
+        } else if (this.drawWinner === "p2") {
+          y = "320px"
+        } else {
+          y = "-320px"
+        }
+        el.style.transform = `translate(${x}, ${y})`
+      }
+    },
     drawThreeBeforeEnter: function (el) {
       let y = 0
       let x = "-170px"
@@ -112,6 +131,8 @@ export default {
         el.style.transform = `translate(${x}, ${y}) rotateY(0)`
       }, d)
     },
+    drawThreeBeforeLeave: function (el) {
+    },
     warCardBeforeEnter: function (el) {
       el.style.transform = `translate(-340px, 0) rotateY(180deg)`
     },
@@ -121,6 +142,8 @@ export default {
         y = "-" + y
       }
       el.style.transform = `translate(0, ${y}) rotateY(180deg)`
+    },
+    warCardBeforeLeave: function (el) {
     }
   },
   components: {
@@ -153,7 +176,8 @@ div.war-card {
 }
 .play-card-enter-active,
 .draw-three-enter-active,
-.war-card-enter-active {
+.war-card-enter-active,
+.play-card-leave-active {
   transition: all .5s;
 }
 </style>
