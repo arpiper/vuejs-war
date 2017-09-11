@@ -1,6 +1,6 @@
 <template>
   <div class="player-hand">
-    <h2>{{ name }}</h2>
+    <h2 :class="playerId">{{ name }}</h2>
     <card
       v-if="cards"
       class="deck"
@@ -19,7 +19,6 @@
     </transition>
     <div v-if="drawThree">
       <transition-group name="draw-three"
-        @before-enter="drawThreeBeforeEnter"
         @after-enter="drawThreeAfterEnter">
         <card
           v-for="(c,i) in drawThree"
@@ -27,13 +26,13 @@
           v-bind:value="c.value"
           v-bind:suit="c.suit"
           v-bind:faceUp="false"
-          v-bind:date-index="i"
+          v-bind:data-index="i"
           v-bind:owner="playerId"
           cardBack="card">
         </card>
       </transition-group>
       <transition-group name="war-card"
-        @before-enter="playCardBeforeEnter"
+        @before-enter="warCardBeforeEnter"
         @after-enter="warCardAfterEnter">
         <card
           v-if="warCard"
@@ -88,24 +87,40 @@ export default {
     },
     playCardAfterEnter: function(el) {
       let x = 0
-      let y = 0
-      el.style.transform = `translate(${x}, ${y}) rotateY(180deg)`
-    },
-    drawThreeBeforeEnter: function (el) {
-      let d = el.dataset.index * 250
-      let y = 0
-      let x = "-85px"     
+      let y = "100px"
+      if (this.playerId === "p2") {
+        y = "-100px"
+      }
+      let d = 0
+      if (this.warCard.length) {
+        d = 1000
+      }
       setTimeout(function () {
-        el.style.tranform = `translate(${x}, ${y}) rotateY(0)`
+        el.style.transform = `translate(${x}, ${y}) rotateY(180deg)`
       }, d)
     },
-    drawThreeAfterEnter: function (el) {
+    drawThreeBeforeEnter: function (el) {
       let y = 0
-      let x = el.dataset.index * -25 + 100
-      el.style.tranform = `translate(${x}px, ${y}) rotateY(0)`
+      let x = "-170px"
+      el.style.transform = `translate(${x}, ${y}) rotateY(0)`
+    },
+    drawThreeAfterEnter: function (el) {
+      let d = el.dataset.index * 250
+      let y = 0
+      let x = `${el.dataset.index * -25 + 100}px`
+      setTimeout(function () {
+        el.style.transform = `translate(${x}, ${y}) rotateY(0)`
+      }, d)
+    },
+    warCardBeforeEnter: function (el) {
+      el.style.transform = `translate(-340px, 0) rotateY(180deg)`
     },
     warCardAfterEnter: function (el) {
-      el.style.transform = `translate(0, 0) rotateY(180deg)`
+      let y = "100px"
+      if (this.playerId === "p2") {
+        y = "-" + y
+      }
+      el.style.transform = `translate(0, ${y}) rotateY(180deg)`
     }
   },
   components: {

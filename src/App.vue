@@ -1,33 +1,40 @@
 <template>
   <div id="app">
-    <div class="main">
-      <deck class="deck"></deck>
-      <hand 
-        class="hand" 
-        :cards="p1Hand"
-        playerId="p1"
-        :drawWinner="drawWinner"
-        name="Player 1">
-      </hand>
-      <div v-if="winner" class="win">{{ winner }} wins!!</div>
-      <hand 
-        class="hand" 
-        :cards="p2Hand"
-        playerId="p2"
-        :drawWinner="drawWinner"
-        name="Player 2">
-      </hand>
+    <div class="column">
+      <div class="main">
+        <deck class="deck"></deck>
+        <hand 
+          class="hand" 
+          :cards="p1Hand"
+          playerId="p1"
+          :drawWinner="drawWinner"
+          name="Player 1">
+        </hand>
+        <div v-if="winner" class="win">{{ winner }} wins!!</div>
+        <hand 
+          class="hand" 
+          :cards="p2Hand"
+          playerId="p2"
+          :drawWinner="drawWinner"
+          name="Player 2">
+        </hand>
+      </div>
+      <div>
+        <button @click="redeal()">New Game</button>
+        <button @click="drawCards()" :disabled="winner">Draw</button>
+        <button @click="run()" :disabled="winner">Run</button>
+        <button @click="clearCards()" >clear</button>
+      </div>
     </div>
-    <div>
-      <button @click="redeal()">New Game</button>
-      <button @click="drawCards()" :disabled="winner">Draw</button>
-      <button @click="run()" :disabled="winner">Run</button>
-      <button @click="clearCards()" >clear</button>
+    <div class="winner-list">
+      <span v-for="w in drawWinners" :class="w">
+        {{ w }}
+      </span>
     </div>
     <div class="output">
-      <!--span>{{ player1 }}</span-->
-      <span>{{ p1Hand.length + p2Hand.length }}</span>
-      <!--span>{{ player2 }}</span-->
+      <span class="p1">P1: {{ p1Hand.length }}</span>
+      <span class="p2">P2: {{ p2Hand.length }}</span>
+      <span>total: {{ p1Hand.length + p2Hand.length }}</span>
     </div>
   </div>
 </template>
@@ -45,6 +52,7 @@ export default {
       deck: [],
       winner: undefined,
       drawWinner: undefined,
+      drawWinners: [],
     }
   },
   computed: {
@@ -95,6 +103,7 @@ export default {
           this.winner = "Player 1"
         } 
         this.drawWinner = "p1"
+        this.drawWinners.push("p1")
         return 1
       } else if (this.p1Card.value < this.p2Card.value) {
         this.$store.commit("collectCards", {player: "p2"})
@@ -102,6 +111,7 @@ export default {
           this.winner = "Player 2"
         } 
         this.drawWinner = "p2"
+        this.drawWinners.push("p2")
         return 2
       } else {
         let vm = this
@@ -183,7 +193,13 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+.column {
+  display: flex;
   flex-direction: column;
+  flex: 2;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 h1, h2 {
   font-weight: normal;
@@ -219,8 +235,31 @@ button {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
 }
 .output span {
-  flex: 1;
+}
+.winner-list {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+.winner-list span {
+  display: block;
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #dcdcdc;
+}
+.p1 {
+  color: blue;
+}
+.p2 { 
+  color: red;
 }
 </style>
