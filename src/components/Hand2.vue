@@ -105,7 +105,6 @@ export default {
     },
     playCardBeforeLeave: function (el) {
       if (!this.warCard.length) {
-        console.log(this)
         let x = "-85px"
         let y = 0
         if (this.drawWinner === this.playerId) {
