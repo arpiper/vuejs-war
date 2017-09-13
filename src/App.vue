@@ -191,33 +191,19 @@ export default {
   padding: 50px;
   height: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 .column {
   display: flex;
   flex-direction: column;
   flex: 2;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
-}
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
 }
 .main {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
   flex-direction: column;
@@ -225,11 +211,6 @@ a {
 }
 .hand {
   flex: 1;
-}
-button {
-  flex: 0;
-  height: 50px;
-  width: 100px;
 }
 .output {
   display: flex;
@@ -250,16 +231,64 @@ button {
 .winner-list span {
   display: block;
 }
+.p1 {
+  color: blue;
+}
+.p2 { 
+  color: red;
+}
+h1, h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+button {
+  flex: 0;
+  height: 50px;
+  width: 100px;
+  background-color: #4caf50;
+  border: 3px solid #4caf50;
+}
+button:hover {
+  background-color: white;
+  cursor: pointer;
+}
+button:active {
+  background-color: #4caf50;
+  opacity: .5;
+}
+button:focus {
+  outline: none;
+}
 ::-webkit-scrollbar {
   width: 5px;
 }
 ::-webkit-scrollbar-thumb{
   background-color: #dcdcdc;
 }
-.p1 {
-  color: blue;
+@media screen and (max-width: 480px) {
+
 }
-.p2 { 
-  color: red;
+@media screen and (min-width: 480px) and (max-width: 720px) {
+  #app {
+    flex-direction: column;
+    padding: 5px;
+  }
+  .winner-list {
+    overflow-x: scroll;
+    flex-direction: row;
+  }
+  .winner-list span {
+    display: inline-block;
+  }
 }
 </style>

@@ -158,6 +158,7 @@ export default {
   display: flex;
   width: 60%;
   height: 40%;
+  max-height: 300px;
   align-items: center;
 }
 .deck {
@@ -178,5 +179,10 @@ div.war-card {
 .war-card-enter-active,
 .play-card-leave-active {
   transition: all .5s;
+}
+@media screen and (min-width: 480px) and (max-width: 720px) {
+  .player-hand {
+    width: 100%;
+  }
 }
 </style>
