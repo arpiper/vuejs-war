@@ -22,7 +22,6 @@
       <div>
         <button @click="redeal()">New Game</button>
         <button @click="drawCards()" :disabled="winner">Draw</button>
-        <button @click="run()" :disabled="winner">Run</button>
         <button @click="clearCards()" >clear</button>
       </div>
     </div>
@@ -80,20 +79,6 @@ export default {
       this.player2 = []
       this.deck = []
       this.evtHub.$emit("redeal")
-    },
-    run: function () {
-      let vm = this
-      this.playCards()
-      let w = this.compareCards()
-      if (w === 0) {
-        setTimeout(function () {
-          vm.commenceWar()
-        }, 500)
-      } else {
-        setTimeout(function () {
-          vm.clearCards()
-        }, 500)
-      }
     },
     compareCards: function () {
       this.$store.commit("updatePot", {cards: [this.p1Card, this.p2Card]})
@@ -258,9 +243,11 @@ button {
   background-color: #4caf50;
   border: 3px solid #4caf50;
 }
-button:hover {
-  background-color: white;
-  cursor: pointer;
+@media (hover: hover) {
+  button:hover {
+    background-color: white;
+    cursor: pointer;
+  }
 }
 button:active {
   background-color: #4caf50;
